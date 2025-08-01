@@ -44,22 +44,9 @@ enum class Days {
 	MAX_DAYS
 };
 
-void increaseWednesdayAttendance(int id) {
-	attendanceData[id][static_cast<int>(Days::WED)] += 1;
-}
-
 int getWednesdayAttendance(int id) {
 	return attendanceData[id][static_cast<int>(Days::WED)];
 }
-
-void increaseSaturdayAttendance(int id) {
-	attendanceData[id][static_cast<int>(Days::SAT)] += 1;
-}
-
-void increaseSundayAttendance(int id) {
-	attendanceData[id][static_cast<int>(Days::SUN)] += 1;
-}
-
 
 int getWeekendAttendance(int id) {
 	return attendanceData[id][static_cast<int>(Days::SAT)] + attendanceData[id][static_cast<int>(Days::SUN)];
@@ -85,16 +72,12 @@ int getPoint(int id, Days day) {
 	case Days::TUE:
 		return DEFAULT_POINT;
 	case Days::WED:
-		increaseWednesdayAttendance(id);
 		return WEDNESDAY_POINT;
 	case Days::THU:
 	case Days::FRI:
 		return DEFAULT_POINT;
 	case Days::SAT:
-		increaseSaturdayAttendance(id);
-		return WEEKEND_POINT;
 	case Days::SUN:
-		increaseSundayAttendance(id);
 		return WEEKEND_POINT;
 	default:
 		break;
