@@ -33,9 +33,6 @@ int points[MAX_USER];
 int grade[MAX_USER];
 string names[MAX_USER];
 
-int wednesdayAttendance[MAX_USER];
-int weekendAttendance[MAX_USER];
-
 enum class Days { 
 	MON, 
 	TUE, 
@@ -48,19 +45,24 @@ enum class Days {
 };
 
 void increaseWednesdayAttendance(int id) {
-	wednesdayAttendance[id] += 1;
+	attendanceData[id][static_cast<int>(Days::WED)] += 1;
 }
 
 int getWednesdayAttendance(int id) {
-	return wednesdayAttendance[id];
+	return attendanceData[id][static_cast<int>(Days::WED)];
 }
 
-void increaseWeekendAttendance(int id) {
-	weekendAttendance[id] += 1;
+void increaseSaturdayAttendance(int id) {
+	attendanceData[id][static_cast<int>(Days::SAT)] += 1;
 }
+
+void increaseSundayAttendance(int id) {
+	attendanceData[id][static_cast<int>(Days::SUN)] += 1;
+}
+
 
 int getWeekendAttendance(int id) {
-	return weekendAttendance[id];
+	return attendanceData[id][static_cast<int>(Days::SAT)] + attendanceData[id][static_cast<int>(Days::SUN)];
 }
 
 Days getDayIndex(const string& day)
@@ -89,8 +91,10 @@ int getPoint(int id, Days day) {
 	case Days::FRI:
 		return DEFAULT_POINT;
 	case Days::SAT:
+		increaseSaturdayAttendance(id);
+		return WEEKEND_POINT;
 	case Days::SUN:
-		increaseWeekendAttendance(id);
+		increaseSundayAttendance(id);
 		return WEEKEND_POINT;
 	default:
 		break;
@@ -136,11 +140,11 @@ void updateUserData(string name, string day) {
 
 void updateBonusScore() {
 	for (int id = 1; id <= id_cnt; id++) {
-		if (attendanceData[id][static_cast<int>(Days::WED)] >= BONUS_POINT_CUTOFF) {
+		if (getWednesdayAttendance(id) >= BONUS_POINT_CUTOFF) {
 			points[id] += BONUS_POINT;
 		}
 
-		if ((attendanceData[id][static_cast<int>(Days::SAT)] + attendanceData[id][static_cast<int>(Days::SUN)]) >= BONUS_POINT_CUTOFF) {
+		if (getWeekendAttendance(id) >= BONUS_POINT_CUTOFF) {
 			points[id] += BONUS_POINT;
 		}
 	}
